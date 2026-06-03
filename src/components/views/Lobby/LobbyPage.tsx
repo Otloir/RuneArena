@@ -49,19 +49,26 @@ export default function LobbyPage(): ReactElement {
       setCreaturesLoading(true);
       setCreaturesError(null);
 
-      const allCreatures = await getCreatures();
+      try {
+        const allCreatures = await getCreatures();
 
-      if (!isMounted) return;
+        if (!isMounted) return;
 
-      if (!allCreatures) {
-        setCreatures([]);
-        setCreaturesError("Failed to load creatures");
-        setCreaturesLoading(false);
-        return;
+        if (!allCreatures) {
+          setCreatures([]);
+          setCreaturesError("Failed to load creatures");
+          return;
+        }
+
+        setCreatures(allCreatures);
+      } catch (err) {
+        if (!isMounted) return;
+        setCreaturesError(
+          err instanceof Error ? err.message : "Failed to load creatures",
+        );
+      } finally {
+        if (isMounted) setCreaturesLoading(false);
       }
-
-      setCreatures(allCreatures);
-      setCreaturesLoading(false);
     }
 
     loadCreatures();
@@ -71,16 +78,16 @@ export default function LobbyPage(): ReactElement {
     };
   }, []);
 
-  if (playerState.status === "loading" || creaturesLoading) {
-    return <p className="pageLoadingState">Loading...</p>;
-  }
-
   if (playerState.status === "error") {
     return <p>Something went wrong: {playerState.message}</p>;
   }
 
   if (creaturesError) {
     return <p>Something went wrong: {creaturesError}</p>;
+  }
+
+  if (playerState.status === "loading" || creaturesLoading) {
+    return <p className="pageLoadingState">Loading...</p>;
   }
 
   const { player, identityToken } = playerState;
