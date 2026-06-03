@@ -1,5 +1,9 @@
 import type { ReactElement } from "react";
+<<<<<<< HEAD
 import { useEffect, useRef, useState } from "react";
+=======
+import { useEffect, useMemo, useRef, useState } from "react";
+>>>>>>> 431b753b51e1188064aa8bfb47dca4eff8e6fe67
 import { useNavigate } from "react-router-dom";
 import StatusPanel from "../../molecules/StatusPanel/StatusPanel";
 import Creature from "../../molecules/Creature/Creature";
@@ -20,7 +24,10 @@ interface BattleArenaProps {
   readonly playerOneCreatureId: string | number;
   readonly playerTwoCreatureId: string | number;
   readonly transaction: TransactionResponse | null;
+<<<<<<< HEAD
   readonly isGuest: boolean;
+=======
+>>>>>>> 431b753b51e1188064aa8bfb47dca4eff8e6fe67
 }
 
 export default function BattleArena({
@@ -29,7 +36,10 @@ export default function BattleArena({
   playerOneCreatureId,
   playerTwoCreatureId,
   transaction,
+<<<<<<< HEAD
   isGuest,
+=======
+>>>>>>> 431b753b51e1188064aa8bfb47dca4eff8e6fe67
 }: BattleArenaProps): ReactElement {
   const {
     creature: playerOneCreature,
@@ -45,6 +55,7 @@ export default function BattleArena({
     error: playerTwoError,
   } = useCreatureBase(playerTwoCreatureId);
 
+<<<<<<< HEAD
   const randomizedOpponentLevelRef = useRef<number | null>(null);
   if (randomizedOpponentLevelRef.current === null && playerOneLevelId !== null) {
     const roll = Math.floor(Math.random() * 3);
@@ -56,6 +67,19 @@ export default function BattleArena({
   const randomizedOpponentLevel = randomizedOpponentLevelRef.current ?? 1;
 
   
+=======
+  const randomizedOpponentLevel = useMemo((): number => {
+    if (!playerOneLevel) return 1;
+
+    const roll = Math.floor(Math.random() * 3);
+
+    if (roll === 0) return Math.max(1, playerOneLevel - 1);
+    if (roll === 2) return playerOneLevel + 1;
+
+    return playerOneLevel;
+  }, [playerOneLevel]);
+
+>>>>>>> 431b753b51e1188064aa8bfb47dca4eff8e6fe67
   const {
     playerHp,
     opponentHp,
@@ -91,8 +115,11 @@ export default function BattleArena({
   const [playerIsHit, setPlayerIsHit] = useState<boolean>(false);
   const [opponentIsHit, setOpponentIsHit] = useState<boolean>(false);
 
+<<<<<<< HEAD
   const [opponentIsAttacking, setOpponentIsAttacking] = useState(false);
 
+=======
+>>>>>>> 431b753b51e1188064aa8bfb47dca4eff8e6fe67
   // ── Inventory overlay ────────────────────────────────────────────────────
   const [isInventoryOpen, setIsInventoryOpen] = useState<boolean>(false);
 
@@ -132,6 +159,7 @@ export default function BattleArena({
     setPrevOpponentHp(opponentHp);
   }, [opponentHp, prevOpponentHp]);
 
+<<<<<<< HEAD
   // ── Opponent attack animation delay ─────────────────────────────────────
   useEffect(() => {
     if (turnOwner !== "opponent" || !isProcessing) {
@@ -146,6 +174,8 @@ export default function BattleArena({
     return () => clearTimeout(timer);
   }, [turnOwner, isProcessing]);
 
+=======
+>>>>>>> 431b753b51e1188064aa8bfb47dca4eff8e6fe67
   // ── Creature load failure → navigate away immediately ────────────────────
 
   useEffect((): void => {
@@ -157,7 +187,11 @@ export default function BattleArena({
     navigate("/result", {
       replace: true,
       state: {
+<<<<<<< HEAD
         sessionError: "unknown",
+=======
+        sessionError: "unknown" as BattleError,
+>>>>>>> 431b753b51e1188064aa8bfb47dca4eff8e6fe67
         winner: undefined,
         playerCreatureName: undefined,
         opponentCreatureName: undefined,
@@ -175,8 +209,11 @@ export default function BattleArena({
 
     battleStartedRef.current = true;
 
+<<<<<<< HEAD
     if (isGuest) return;
 
+=======
+>>>>>>> 431b753b51e1188064aa8bfb47dca4eff8e6fe67
     startBattle({
       playerId: Number(playerOneId),
       opponentId: Number(playerTwoId),
@@ -210,7 +247,10 @@ export default function BattleArena({
     playerOneCreatureId,
     playerTwoCreatureId,
     navigate,
+<<<<<<< HEAD
     isGuest,
+=======
+>>>>>>> 431b753b51e1188064aa8bfb47dca4eff8e6fe67
   ]);
 
   // ── Forfeit on unmount if battle hasn't concluded normally ───────────────
@@ -274,6 +314,10 @@ export default function BattleArena({
         console.warn(
           "[BattleArena] Battle ended but no battleId recorded — reward not granted.",
         );
+<<<<<<< HEAD
+=======
+
+>>>>>>> 431b753b51e1188064aa8bfb47dca4eff8e6fe67
         navigate("/result", {
           replace: true,
           state: {
@@ -285,6 +329,10 @@ export default function BattleArena({
             stamp,
           },
         });
+<<<<<<< HEAD
+=======
+
+>>>>>>> 431b753b51e1188064aa8bfb47dca4eff8e6fe67
         return;
       }
 
@@ -292,6 +340,10 @@ export default function BattleArena({
 
       try {
         await endBattle(battleId, winnerUserId);
+<<<<<<< HEAD
+=======
+
+>>>>>>> 431b753b51e1188064aa8bfb47dca4eff8e6fe67
         navigate("/result", {
           replace: true,
           state: {
@@ -300,7 +352,11 @@ export default function BattleArena({
             opponentCreatureName: playerTwoCreature.name,
             xpGained,
             stamp,
+<<<<<<< HEAD
             isGuest: false,
+=======
+            isGuest: transaction === null,
+>>>>>>> 431b753b51e1188064aa8bfb47dca4eff8e6fe67
           },
         });
       } catch (reason: unknown) {
@@ -328,7 +384,10 @@ export default function BattleArena({
     navigate,
     xpGained,
     transaction,
+<<<<<<< HEAD
     isGuest,
+=======
+>>>>>>> 431b753b51e1188064aa8bfb47dca4eff8e6fe67
   ]);
 
   // ── Loading state ────────────────────────────────────────────────────────
@@ -343,7 +402,11 @@ export default function BattleArena({
     return (
       <section className={styles.arena}>
         <div
+<<<<<<< HEAD
           className="pageLoadingState loadingState"
+=======
+          className={styles.loadingState}
+>>>>>>> 431b753b51e1188064aa8bfb47dca4eff8e6fe67
           role="status"
           aria-live="polite"
           aria-label="Loading battle..."
@@ -396,7 +459,11 @@ export default function BattleArena({
                 userId={playerTwoId}
                 creatureId={playerTwoCreatureId}
                 side="opponent"
+<<<<<<< HEAD
                 isAttacking={opponentIsAttacking}
+=======
+                isAttacking={turnOwner === "opponent" && isProcessing}
+>>>>>>> 431b753b51e1188064aa8bfb47dca4eff8e6fe67
                 isHit={opponentIsHit}
               />
             </div>

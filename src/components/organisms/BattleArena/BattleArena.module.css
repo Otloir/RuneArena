@@ -60,6 +60,19 @@
   z-index: 10;
 }
 
+<<<<<<< HEAD
+=======
+.loadingState {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+>>>>>>> 431b753b51e1188064aa8bfb47dca4eff8e6fe67
 /* ── Tablet ── */
 @media (min-width: 40rem) {
   .arena {
