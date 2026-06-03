@@ -56,6 +56,7 @@ export default function ArenaPage(): ReactElement {
       playerOneCreatureId={playerOneCreatureId}
       playerTwoCreatureId={playerTwoCreatureId}
       transaction={transaction}
+      isGuest={transaction === null}
     />
   );
 }
