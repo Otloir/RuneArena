@@ -256,8 +256,7 @@ export default function BattleArena({
     if (playerHp > 0 && opponentHp > 0) return;
     if (sessionInvalidRef.current) return;
 
-    const winner: "player" | "opponent" =
-      opponentHp <= 0 ? "player" : "opponent";
+    const winner: "player" | "opponent" = opponentHp <= 0 ? "player" : "opponent";
 
     const timer = setTimeout(async (): Promise<void> => {
       battleConcludedRef.current = true;
