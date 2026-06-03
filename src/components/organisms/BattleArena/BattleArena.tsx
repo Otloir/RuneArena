@@ -13,6 +13,7 @@ import type { BattleError } from "../../../database/battle.database";
 import { formatStamp } from "../../../api/centralbank.api";
 import type { TransactionResponse } from "../../../types/api.types";
 import { consumeUserItem } from "../../../database/item.database";
+import { getMaxLevel } from "../../../database/creature.database";
 
 interface BattleArenaProps {
   readonly playerOneId: string | number;
@@ -45,18 +46,29 @@ export default function BattleArena({
     error: playerTwoError,
   } = useCreatureBase(playerTwoCreatureId);
 
+  const maxLevelRef = useRef<number>(Infinity);
+
+  useEffect((): void => {
+    getMaxLevel().then((max) => {
+      maxLevelRef.current = max;
+    });
+  }, []);
+
   const randomizedOpponentLevelRef = useRef<number | null>(null);
   if (
     randomizedOpponentLevelRef.current === null &&
     playerOneLevelId !== null
   ) {
-    const roll = Math.floor(Math.random() * 3);
-    randomizedOpponentLevelRef.current =
-      roll === 0
-        ? Math.max(1, playerOneLevel - 1)
-        : roll === 2
-          ? playerOneLevel + 1
-          : playerOneLevel;
+      const roll = Math.floor(Math.random() * 3);
+      const rawLevel =
+        roll === 0
+          ? Math.max(1, playerOneLevel - 1)
+          : roll === 2
+            ? playerOneLevel + 1
+            : playerOneLevel;
+
+  randomizedOpponentLevelRef.current = Math.min(rawLevel, maxLevelRef.current);
+
   }
   const randomizedOpponentLevel = randomizedOpponentLevelRef.current ?? 1;
 
