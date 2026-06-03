@@ -416,32 +416,6 @@ export function useBattle({
   );
 
   // =========================
-<<<<<<< HEAD
-=======
-  // AUTO NPC TURN
-  // =========================
-
-  useEffect(() => {
-    if (
-      turnOwner !== "opponent" ||
-      isProcessing ||
-      !opponentMoveIds.length ||
-      !isReady
-    )
-      return;
-
-    const run = async (): Promise<void> => {
-      setIsProcessing(true);
-      await new Promise((r) => setTimeout(r, 1500));
-      await executeOpponentTurn(opponentMoveIds);
-      setIsProcessing(false);
-    };
-
-    run();
-  }, [turnOwner, isProcessing, opponentMoveIds, executeOpponentTurn, isReady]);
-
-  // =========================
->>>>>>> 431b753b51e1188064aa8bfb47dca4eff8e6fe67
   // PLAYER MOVE
   // =========================
 
