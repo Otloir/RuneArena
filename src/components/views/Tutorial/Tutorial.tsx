@@ -323,19 +323,26 @@ export default function Tutorial({
         aria-describedby={descId}
         tabIndex={-1}
       >
-        <IconButton
-          onClick={onClose}
-          label="Close tutorial"
-          aria-describedby={descId}
-          iconSrc={closeIcon}
-          variant="invisible"
-          shape="circle"
-          size="md"
-          hoverEffect={false}
-          iconSize="1.5rem"
-          style={{ color: "#000000" }}
-          className={styles.textCarouselClose}
-        />
+        <div className={styles.textCarouselHeader}>
+           <h1 className={styles.textCarouselTitle}>
+            Tutorial
+          </h1>
+
+          <IconButton
+            onClick={onClose}
+            label="Close tutorial"
+            aria-describedby={descId}
+            iconSrc={closeIcon}
+            variant="invisible"
+            shape="circle"
+            size="md"
+            hoverEffect={false}
+            iconSize="1.5rem"
+            style={{ color: "#000000" }}
+            className={styles.textCarouselClose}
+          />
+        </div>
+       
 
         <div
           className={styles.textCarouselViewport}

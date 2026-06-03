@@ -215,6 +215,6 @@
   }
 
   .card {
-    width: 100%; /* fill the wrapper, not 30vw directly */
+    width: 100%; 
   }
 }

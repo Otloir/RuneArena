@@ -35,6 +35,9 @@
   flex-shrink: 0;
   background: none;
   padding: 0;
+  margin-left: auto;
+  position: relative;
+  z-index: 10;
 }
 
 .closeIcon {
@@ -220,6 +223,23 @@
 .keywordNormal {
   color: var(--type-normal-1);
   font-weight: 700;
+}
+
+.textCarouselHeader {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.textCarouselTitle {
+  font-family: var(--sans);
+  font-size: var(--fs-xl);
+  color: var(--text-primary);
+  margin: 0;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
 }
 
 .textCarouselSlide[inert] {

@@ -13,6 +13,7 @@ import type { BattleError } from "../../../database/battle.database";
 import { formatStamp } from "../../../api/centralbank.api";
 import type { TransactionResponse } from "../../../types/api.types";
 import { consumeUserItem } from "../../../database/item.database";
+import { getMaxLevel } from "../../../database/creature.database";
 
 interface BattleArenaProps {
   readonly playerOneId: string | number;
@@ -45,17 +46,32 @@ export default function BattleArena({
     error: playerTwoError,
   } = useCreatureBase(playerTwoCreatureId);
 
+  const maxLevelRef = useRef<number>(Infinity);
+
+  useEffect((): void => {
+    getMaxLevel().then((max) => {
+      maxLevelRef.current = max;
+    });
+  }, []);
+
   const randomizedOpponentLevelRef = useRef<number | null>(null);
-  if (randomizedOpponentLevelRef.current === null && playerOneLevelId !== null) {
-    const roll = Math.floor(Math.random() * 3);
-    randomizedOpponentLevelRef.current =
-      roll === 0 ? Math.max(1, playerOneLevel - 1) :
-      roll === 2 ? playerOneLevel + 1 :
-      playerOneLevel;
+  if (
+    randomizedOpponentLevelRef.current === null &&
+    playerOneLevelId !== null
+  ) {
+      const roll = Math.floor(Math.random() * 3);
+      const rawLevel =
+        roll === 0
+          ? Math.max(1, playerOneLevel - 1)
+          : roll === 2
+            ? playerOneLevel + 1
+            : playerOneLevel;
+
+  randomizedOpponentLevelRef.current = Math.min(rawLevel, maxLevelRef.current);
+
   }
   const randomizedOpponentLevel = randomizedOpponentLevelRef.current ?? 1;
 
-  
   const {
     playerHp,
     opponentHp,
@@ -95,6 +111,7 @@ export default function BattleArena({
 
   // ── Inventory overlay ────────────────────────────────────────────────────
   const [isInventoryOpen, setIsInventoryOpen] = useState<boolean>(false);
+  const [isUsingItem, setIsUsingItem] = useState<boolean>(false);
 
   const battleOver: boolean = playerHp <= 0 || opponentHp <= 0;
 
@@ -251,8 +268,16 @@ export default function BattleArena({
           }
         : null;
 
-      // ── Guest: skip server call entirely ──────────────────────────────
+      // ── Guest: award RC locally then navigate to result ───────────────
       if (isGuest) {
+        try {
+          const { addRunecoins } =
+            await import("../../../database/user.database");
+          await addRunecoins(Number(playerOneId), 5);
+        } catch (err) {
+          console.warn("[BattleArena] Failed to award guest RC:", err);
+        }
+
         navigate("/result", {
           replace: true,
           state: {
@@ -262,6 +287,7 @@ export default function BattleArena({
             xpGained,
             stamp: null,
             isGuest: true,
+            userId: Number(playerOneId),
           },
         });
         return;
@@ -366,6 +392,7 @@ export default function BattleArena({
         onUseItem={async (item): Promise<boolean> => {
           try {
             setIsInventoryOpen(false);
+            setIsUsingItem(true);
 
             await handlePlayerUseItem(item);
 
@@ -375,6 +402,8 @@ export default function BattleArena({
           } catch (err) {
             console.error("Error using item:", err);
             return false;
+          } finally {
+            setIsUsingItem(false);
           }
         }}
       />
@@ -416,7 +445,9 @@ export default function BattleArena({
                 userId={playerOneId}
                 creatureId={playerOneCreatureId}
                 side="player"
-                isAttacking={turnOwner === "player" && isProcessing}
+                isAttacking={
+                  turnOwner === "player" && isProcessing && !isUsingItem
+                }
                 isHit={playerIsHit}
               />
             </div>
