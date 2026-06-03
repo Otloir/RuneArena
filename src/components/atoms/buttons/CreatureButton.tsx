@@ -10,7 +10,6 @@ import defenseIcon from "./../../../assets/icons/defence_icon.svg";
 import healthIcon from "./../../../assets/icons/health_icon.svg";
 import speedIcon from "./../../../assets/icons/speed_icon.svg";
 import evadeIcon from "./../../../assets/icons/evade_icon.svg";
-import swordIcon from "./../../../assets/icons/sword_icon.svg";
 import informationIcon from "./../../../assets/icons/information_icon.svg";
 
 interface CreatureButtonProps {
