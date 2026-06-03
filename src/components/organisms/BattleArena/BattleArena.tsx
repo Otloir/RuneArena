@@ -254,8 +254,6 @@ export default function BattleArena({
       // ── Guest: award RC locally then navigate to result ───────────────
       if (isGuest) {
         try {
-          // Award 5 RC to the guest user in the local Users table
-          // and include userId so ResultPage can fetch the new balance.
           const { addRunecoins } = await import("../../../database/user.database");
           await addRunecoins(Number(playerOneId), 5);
         } catch (err) {
