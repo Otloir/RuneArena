@@ -46,7 +46,7 @@ export default function BattleArena({
     error: playerTwoError,
   } = useCreatureBase(playerTwoCreatureId);
 
-  const maxLevelRef = useRef<number>(Infinity); // safe fallback — will be replaced
+  const maxLevelRef = useRef<number>(Infinity);
 
   useEffect((): void => {
     getMaxLevel().then((max) => {
