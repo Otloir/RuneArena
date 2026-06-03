@@ -278,3 +278,19 @@ export async function initUserCreatures(userId: number): Promise<void> {
     );
   }
 }
+
+export async function getMaxLevel(): Promise<number> {
+  const { data, error } = await supabase
+    .from("Levels")
+    .select("level")
+    .order("level", { ascending: false })
+    .limit(1)
+    .single();
+
+  if (error || !data) {
+    console.error("[getMaxLevel]", error?.message);
+    return 1;
+  }
+
+  return data.level;
+}
