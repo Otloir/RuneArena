@@ -157,7 +157,7 @@ export default function BattleArena({
     navigate("/result", {
       replace: true,
       state: {
-        sessionError: "unknown" as BattleError,
+        sessionError: "unknown",
         winner: undefined,
         playerCreatureName: undefined,
         opponentCreatureName: undefined,
