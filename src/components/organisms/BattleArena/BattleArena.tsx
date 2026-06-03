@@ -58,7 +58,7 @@ export default function BattleArena({
   if (
     randomizedOpponentLevelRef.current === null &&
     playerOneLevelId !== null &&
-    maxLevelRef.current !== null          // wait until max is known
+    maxLevelRef.current !== null
   ) {
       const roll = Math.floor(Math.random() * 3);
       const rawLevel =
