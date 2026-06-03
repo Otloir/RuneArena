@@ -46,16 +46,20 @@ export default function BattleArena({
   } = useCreatureBase(playerTwoCreatureId);
 
   const randomizedOpponentLevelRef = useRef<number | null>(null);
-  if (randomizedOpponentLevelRef.current === null && playerOneLevelId !== null) {
+  if (
+    randomizedOpponentLevelRef.current === null &&
+    playerOneLevelId !== null
+  ) {
     const roll = Math.floor(Math.random() * 3);
     randomizedOpponentLevelRef.current =
-      roll === 0 ? Math.max(1, playerOneLevel - 1) :
-      roll === 2 ? playerOneLevel + 1 :
-      playerOneLevel;
+      roll === 0
+        ? Math.max(1, playerOneLevel - 1)
+        : roll === 2
+          ? playerOneLevel + 1
+          : playerOneLevel;
   }
   const randomizedOpponentLevel = randomizedOpponentLevelRef.current ?? 1;
 
-  
   const {
     playerHp,
     opponentHp,
@@ -95,6 +99,7 @@ export default function BattleArena({
 
   // ── Inventory overlay ────────────────────────────────────────────────────
   const [isInventoryOpen, setIsInventoryOpen] = useState<boolean>(false);
+  const [isUsingItem, setIsUsingItem] = useState<boolean>(false);
 
   const battleOver: boolean = playerHp <= 0 || opponentHp <= 0;
 
@@ -239,7 +244,8 @@ export default function BattleArena({
     if (playerHp > 0 && opponentHp > 0) return;
     if (sessionInvalidRef.current) return;
 
-    const winner: "player" | "opponent" = opponentHp <= 0 ? "player" : "opponent";
+    const winner: "player" | "opponent" =
+      opponentHp <= 0 ? "player" : "opponent";
 
     const timer = setTimeout(async (): Promise<void> => {
       battleConcludedRef.current = true;
@@ -254,7 +260,8 @@ export default function BattleArena({
       // ── Guest: award RC locally then navigate to result ───────────────
       if (isGuest) {
         try {
-          const { addRunecoins } = await import("../../../database/user.database");
+          const { addRunecoins } =
+            await import("../../../database/user.database");
           await addRunecoins(Number(playerOneId), 5);
         } catch (err) {
           console.warn("[BattleArena] Failed to award guest RC:", err);
@@ -374,6 +381,7 @@ export default function BattleArena({
         onUseItem={async (item): Promise<boolean> => {
           try {
             setIsInventoryOpen(false);
+            setIsUsingItem(true);
 
             await handlePlayerUseItem(item);
 
@@ -383,6 +391,8 @@ export default function BattleArena({
           } catch (err) {
             console.error("Error using item:", err);
             return false;
+          } finally {
+            setIsUsingItem(false);
           }
         }}
       />
@@ -424,7 +434,9 @@ export default function BattleArena({
                 userId={playerOneId}
                 creatureId={playerOneCreatureId}
                 side="player"
-                isAttacking={turnOwner === "player" && isProcessing}
+                isAttacking={
+                  turnOwner === "player" && isProcessing && !isUsingItem
+                }
                 isHit={playerIsHit}
               />
             </div>

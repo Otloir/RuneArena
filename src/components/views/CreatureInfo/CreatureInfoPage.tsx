@@ -70,7 +70,9 @@ function StatCell({
           backgroundColor: color,
         }}
       />
-      <span className={styles.statLabel} aria-hidden="true">{label}</span>
+      <span className={styles.statLabel} aria-hidden="true">
+        {label}
+      </span>
       <span
         className={[
           styles.statValue,
@@ -190,10 +192,11 @@ function CreatureInfoPage({
 
     document.addEventListener("keydown", handleKeyDown);
 
-    const dialog = overlayRef.current?.querySelector<HTMLElement>('[role="dialog"]');
+    const dialog =
+      overlayRef.current?.querySelector<HTMLElement>('[role="dialog"]');
     if (dialog) {
       const focusable = dialog.querySelectorAll<HTMLElement>(
-        'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
       );
       if (focusable.length > 0) {
         focusable[0].focus();
@@ -201,7 +204,7 @@ function CreatureInfoPage({
         dialog.focus();
       }
     }
-    
+
     return (): void => document.removeEventListener("keydown", handleKeyDown);
   }, [isOpen, onClose]);
 
@@ -288,10 +291,7 @@ function CreatureInfoPage({
               />
 
               <div className={styles.nameRow}>
-                <h3
-                  className={styles.creatureName}
-                  tabIndex={0}
-                >
+                <h3 className={styles.creatureName} tabIndex={0}>
                   {creature.name}
                 </h3>
 
@@ -326,10 +326,7 @@ function CreatureInfoPage({
               )}
 
               {!isBattleView && creature.description && (
-                <p
-                  className={styles.description}
-                  tabIndex={0}
-                >
+                <p className={styles.description} tabIndex={0}>
                   {creature.description}
                 </p>
               )}
@@ -404,12 +401,8 @@ function CreatureInfoPage({
                     const speedBoost = statBoosts?.speedBoost ?? 0;
 
                     const effectiveEvade = creature.evade + evadeBoost;
-                    const effectiveDefense =
-                      creature.defense +
-                      Math.floor((creature.defense * defenseBoost) / 100);
-                    const effectiveSpeed =
-                      creature.speed +
-                      Math.floor((creature.speed * speedBoost) / 100);
+                    const effectiveDefense = creature.defense + defenseBoost;
+                    const effectiveSpeed = creature.speed + speedBoost;
 
                     return (
                       <>
@@ -486,9 +479,7 @@ function CreatureInfoPage({
 
                       return (
                         <div key={moveId} className={styles.moveRow}>
-                          <div
-                            className={styles.infoMoveWrapper}
-                          >
+                          <div className={styles.infoMoveWrapper}>
                             <MoveButton
                               moveId={moveId}
                               onSelect={(): void => undefined}
@@ -501,18 +492,11 @@ function CreatureInfoPage({
                           {!isUnlocked && (
                             <>
                               <span
-                                id={lockHelpId}
-                                className={styles.visuallyHidden}
-                              >
-                                This move unlocks at level {requiredLevelId}.
-                                Your creature is currently level {resolvedLevelNumber}.
-                              </span>
-                              <span
                                 className={styles.lockedLabel}
                                 aria-label={`Move locked until level ${requiredLevelId}`}
                                 aria-describedby={lockHelpId}
                               >
-                                LOCKED
+                                LOCKED UNTIL LV.{requiredLevelId}
                               </span>
                             </>
                           )}
