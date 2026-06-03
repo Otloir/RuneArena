@@ -157,10 +157,9 @@ export default function BattleArena({
     if (!playerOneCreature || !playerTwoCreature) return;
     if (battleStartedRef.current) return;
 
-    if (isGuest) {                          // ← add this guard
-      battleStartedRef.current = true;      // prevent re-entry
-      return;
-    }
+    battleStartedRef.current = true;
+
+    if (isGuest) return;
 
     startBattle({
       playerId: Number(playerOneId),
