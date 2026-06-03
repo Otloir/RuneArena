@@ -176,6 +176,11 @@
   z-index: 1;
 }
 
+.loadingState {
+  color: var(--text-primary);
+  font-size: 1.25rem;
+}
+
 @media (min-width: 48rem) {
   :root {
     --fs-md: 1.0625rem;
