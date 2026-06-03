@@ -312,7 +312,7 @@ export default function BattleArena({
     navigate,
     xpGained,
     transaction,
-    isGuest,   // ← add this
+    isGuest,
   ]);
 
   // ── Loading state ────────────────────────────────────────────────────────
