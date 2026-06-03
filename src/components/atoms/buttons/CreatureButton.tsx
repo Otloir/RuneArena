@@ -153,18 +153,6 @@ function CreatureButton({
                 className={styles.propertieIcon}
                 aria-hidden="true"
                 style={{
-                  WebkitMaskImage: `url(${swordIcon})`,
-                  maskImage: `url(${swordIcon})`,
-                  backgroundColor: "var(--evade)",
-                }}
-              />{" "}
-              {creature.evade}
-            </span>
-            <span className={styles.stat}>
-              <span
-                className={styles.propertieIcon}
-                aria-hidden="true"
-                style={{
                   WebkitMaskImage: `url(${defenseIcon})`,
                   maskImage: `url(${defenseIcon})`,
                   backgroundColor: "var(--defense)",
