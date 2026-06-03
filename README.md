@@ -4,6 +4,7 @@ RuneArena is a turn-based creature fighting game where you can battle, buy items
 
 You can play it on its own deployed [website](rune-arena.vercel.app), or through https://loopland.se/.
 
+
 ## Features
 
 - **PVE battle** with creatures
@@ -12,6 +13,7 @@ You can play it on its own deployed [website](rune-arena.vercel.app), or through
 - **Level up** system for creatures, giving new moves
 - **Turtorial/help** screen to help with uncertainties and game information
 
+
 ## Tech stack
 
 - React
@@ -19,6 +21,7 @@ You can play it on its own deployed [website](rune-arena.vercel.app), or through
 - Vite
 - CSS Modules
 - Supabase
+
 
 ## Get Started
 
@@ -35,7 +38,20 @@ cd rune-arena
 npm install
 ```
 
+<<<<<<< HEAD
+3. Add .env.local file and keys to the root:
+
+```bash
+VITE_SUPABASE_URL=<SUPABASE_URL>
+VITE_SUPABASE_PUBLISHABLE_KEY=<SUPABASE_PUBLISHABLE_KEY>
+VITE_TIVOLI_API_URL=<CENTRALBANK_WEBSITE>
+VITE_AMUSEMENT_API_KEY=<ACCESS_KEY>
+```
+
+4. Run the dev server:
+=======
 3. Run the dev server:
+>>>>>>> 431b753b51e1188064aa8bfb47dca4eff8e6fe67
 
 ```bash
 npm run dev

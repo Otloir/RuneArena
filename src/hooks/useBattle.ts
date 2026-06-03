@@ -27,21 +27,26 @@ async function fetchCreatureMoveIds(
   creatureId: number,
   creatureLevel?: number,
 ): Promise<number[]> {
-  let query = supabase
+  const { data, error } = await supabase
     .from("Creature_Moves")
-    .select("move_id, level_id")
-    .eq("creature_id", creatureId)
-    .order("level_id", { ascending: true });
-
-  if (creatureLevel !== undefined) {
-    query = query.lte("level_id", creatureLevel);
-  }
-
-  const { data, error } = await query;
+    .select("move_id, level:level_id(level)")
+    .eq("creature_id", creatureId);
 
   if (error || !data) return [];
 
-  return data.map((e) => e.move_id).slice(0, 4);
+  type Row = { move_id: number; level: { level: number } | { level: number }[] };
+  let moves = data as Row[];
+
+  if (creatureLevel !== undefined) {
+    moves = moves.filter((row) => {
+      const lvl = Array.isArray(row.level) ? row.level[0]?.level : row.level?.level;
+      return lvl !== undefined && lvl <= creatureLevel;
+    });
+  }
+
+  return moves
+    .map((row) => row.move_id)
+    .slice(0, 4);
 }
 
 async function fetchCreatureTypeIds(creatureId: number): Promise<number[]> {
@@ -186,7 +191,7 @@ export function useBattle({
   // =========================
 
   const isReady =
-    !!playerCreature && !!opponentCreature && effectivenessMap !== null;
+    !!playerCreature && !!opponentCreature && effectivenessMap !== null && opponentMoveIds.length > 0;
 
   const log = useCallback((msg: string) => {
     setBattleLog((p) => [...p, msg]);
@@ -269,9 +274,15 @@ export function useBattle({
 
   useEffect(() => {
     if (!opponentCreatureId) return;
+    let cancelled = false;
+
     fetchCreatureMoveIds(Number(opponentCreatureId), opponentLevel).then(
-      setOpponentMoveIds,
+      (ids) => {
+        if (!cancelled) setOpponentMoveIds(ids);
+      }
     );
+
+    return () => { cancelled = true; };
   }, [opponentCreatureId, opponentLevel]);
 
   // =========================
@@ -405,29 +416,6 @@ export function useBattle({
   );
 
   // =========================
-  // AUTO NPC TURN
-  // =========================
-
-  useEffect(() => {
-    if (
-      turnOwner !== "opponent" ||
-      isProcessing ||
-      !opponentMoveIds.length ||
-      !isReady
-    )
-      return;
-
-    const run = async (): Promise<void> => {
-      setIsProcessing(true);
-      await new Promise((r) => setTimeout(r, 1500));
-      await executeOpponentTurn(opponentMoveIds);
-      setIsProcessing(false);
-    };
-
-    run();
-  }, [turnOwner, isProcessing, opponentMoveIds, executeOpponentTurn, isReady]);
-
-  // =========================
   // PLAYER MOVE
   // =========================
 
@@ -546,7 +534,30 @@ export function useBattle({
     },
     [turnOwner, isProcessing, applyItemEffect, playerCreature, opponentCreature, playerStatBoosts, log],
   );
- 
+
+  // =========================
+  // AUTO NPC TURN
+  // =========================
+
+  useEffect(() => {
+    if (
+      turnOwner !== "opponent" ||
+      isProcessing ||
+      !opponentMoveIds.length ||
+      !isReady
+    )
+      return;
+
+    const run = async (): Promise<void> => {
+      setIsProcessing(true);
+      await new Promise((r) => setTimeout(r, 2200));
+      await executeOpponentTurn(opponentMoveIds);
+      setIsProcessing(false);
+    };
+
+    run();
+  }, [turnOwner, isProcessing, opponentMoveIds, executeOpponentTurn, isReady]);
+  
 
   // =========================
   // RETURN

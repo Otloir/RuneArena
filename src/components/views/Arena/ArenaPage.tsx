@@ -46,7 +46,7 @@ export default function ArenaPage(): ReactElement {
   }
 
   if (playerTwoCreatureId === null) {
-    return <div>Loading arena...</div>;
+    return <div className="pageLoadingState">Loading arena...</div>;
   }
 
   return (
@@ -56,6 +56,7 @@ export default function ArenaPage(): ReactElement {
       playerOneCreatureId={playerOneCreatureId}
       playerTwoCreatureId={playerTwoCreatureId}
       transaction={transaction}
+      isGuest={transaction === null}
     />
   );
 }

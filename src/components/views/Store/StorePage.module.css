@@ -29,17 +29,12 @@
 .userMoneyDisplay {
   padding: 0 0.75rem;
   min-height: 3.1rem;
-
   border-radius: 1rem;
   background-color: var(--coin-container-bg);
   color: var(--coin-text);
-
   display: flex;
   align-items: center;
   gap: 0.5rem;
-
-  box-sizing: border-box;
-
   max-width: 9rem;
   overflow: hidden;
 }
@@ -65,13 +60,10 @@
   position: fixed;
   top: 0.75rem;
   right: 0.75rem;
-
   display: flex;
   align-items: center;
   gap: 0.5rem;
-
   max-width: calc(100vw - 1.5rem);
-
   z-index: 20;
 }
 
