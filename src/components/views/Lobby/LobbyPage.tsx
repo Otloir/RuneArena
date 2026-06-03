@@ -9,6 +9,8 @@ import InventoryPage from "../Inventory/InventoryPage";
 import Tutorial from "../Tutorial/Tutorial";
 import styles from "./LobbyPage.module.css";
 import IconButton from "../../atoms/buttons/IconButton";
+import { getCreatures } from "../../../database/creature.database";
+import type { Creature } from "../../../types/creature.types";
 import informationIcon from "../../../assets/icons/information_icon.svg";
 import bagIcon from "../../../assets/icons/bag_icon.svg";
 import shopIcon from "../../../assets/icons/shop_icon.svg";
@@ -27,6 +29,9 @@ export default function LobbyPage(): ReactElement {
   const [isInfoOpen, setIsInfoOpen] = useState(false);
   const [isCharging, setIsCharging] = useState(false);
   const [chargeError, setChargeError] = useState<string | null>(null);
+  const [creatures, setCreatures] = useState<Creature[]>([]);
+  const [creaturesLoading, setCreaturesLoading] = useState<boolean>(true);
+  const [creaturesError, setCreaturesError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!isInventoryOpen && !isInfoOpen) return;
@@ -37,12 +42,45 @@ export default function LobbyPage(): ReactElement {
     };
   }, [isInventoryOpen, isInfoOpen]);
 
-  if (playerState.status === "loading") {
+  useEffect((): (() => void) | void => {
+    let isMounted = true;
+
+    async function loadCreatures(): Promise<void> {
+      setCreaturesLoading(true);
+      setCreaturesError(null);
+
+      const allCreatures = await getCreatures();
+
+      if (!isMounted) return;
+
+      if (!allCreatures) {
+        setCreatures([]);
+        setCreaturesError("Failed to load creatures");
+        setCreaturesLoading(false);
+        return;
+      }
+
+      setCreatures(allCreatures);
+      setCreaturesLoading(false);
+    }
+
+    loadCreatures();
+
+    return (): void => {
+      isMounted = false;
+    };
+  }, []);
+
+  if (playerState.status === "loading" || creaturesLoading) {
     return <p className="pageLoadingState">Loading...</p>;
   }
 
   if (playerState.status === "error") {
     return <p>Something went wrong: {playerState.message}</p>;
+  }
+
+  if (creaturesError) {
+    return <p>Something went wrong: {creaturesError}</p>;
   }
 
   const { player, identityToken } = playerState;
@@ -172,24 +210,15 @@ export default function LobbyPage(): ReactElement {
               }}
             >
               <div className={styles.creatureSelectButtons}>
-                <CreatureButton
-                  creatureId="1"
-                  userId={userId}
-                  onSelect={() => handleCreatureSelect("1")}
-                  selected={selectedCreatureId === "1"}
-                />
-                <CreatureButton
-                  creatureId="2"
-                  userId={userId}
-                  onSelect={() => handleCreatureSelect("2")}
-                  selected={selectedCreatureId === "2"}
-                />
-                <CreatureButton
-                  creatureId="3"
-                  userId={userId}
-                  onSelect={() => handleCreatureSelect("3")}
-                  selected={selectedCreatureId === "3"}
-                />
+                {creatures.map((creature) => (
+                  <CreatureButton
+                    key={creature.id}
+                    creatureId={creature.id}
+                    userId={userId}
+                    onSelect={() => handleCreatureSelect(creature.id)}
+                    selected={selectedCreatureId === creature.id}
+                  />
+                ))}
               </div>
               {chargeError && <p>Payment failed: {chargeError}</p>}
               <Button
