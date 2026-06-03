@@ -55,6 +55,7 @@ export default function BattleArena({
   }
   const randomizedOpponentLevel = randomizedOpponentLevelRef.current ?? 1;
 
+  
   const {
     playerHp,
     opponentHp,
@@ -89,6 +90,8 @@ export default function BattleArena({
   const [prevOpponentHp, setPrevOpponentHp] = useState<number | null>(null);
   const [playerIsHit, setPlayerIsHit] = useState<boolean>(false);
   const [opponentIsHit, setOpponentIsHit] = useState<boolean>(false);
+
+  const [opponentIsAttacking, setOpponentIsAttacking] = useState(false);
 
   // ── Inventory overlay ────────────────────────────────────────────────────
   const [isInventoryOpen, setIsInventoryOpen] = useState<boolean>(false);
@@ -128,6 +131,20 @@ export default function BattleArena({
 
     setPrevOpponentHp(opponentHp);
   }, [opponentHp, prevOpponentHp]);
+
+  // ── Opponent attack animation delay ─────────────────────────────────────  ← ADD HERE
+  useEffect(() => {
+    if (turnOwner !== "opponent" || !isProcessing) {
+      setOpponentIsAttacking(false);
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      setOpponentIsAttacking(true);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [turnOwner, isProcessing]);
 
   // ── Creature load failure → navigate away immediately ────────────────────
 
@@ -379,7 +396,7 @@ export default function BattleArena({
                 userId={playerTwoId}
                 creatureId={playerTwoCreatureId}
                 side="opponent"
-                isAttacking={turnOwner === "opponent" && isProcessing}
+                isAttacking={opponentIsAttacking}
                 isHit={opponentIsHit}
               />
             </div>
