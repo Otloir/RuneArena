@@ -1,9 +1,8 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef } from "react";
 import type { ReactElement } from "react";
 import styles from "./ResultPage.module.css";
 import Button from "../../atoms/buttons/Button";
-import { getUserBalance } from "../../../database/user.database";
 import type { BattleError } from "../../../database/battle.database";
 
 interface StampReward {
@@ -63,8 +62,6 @@ export default function ResultPage(): ReactElement {
     }
   };
 
-  const [newBalance, setNewBalance] = useState<number | null>(null);
-
   useEffect((): void => {
     if (stamp === null) {
       console.log("ResultPage: no stamp awarded (guest)");
@@ -74,10 +71,6 @@ export default function ResultPage(): ReactElement {
   useEffect((): void => {
     const userId: number | undefined = state?.userId;
     if (!playerWon || userId == null || sessionError != null) return;
-
-    getUserBalance(userId).then((balance: number | null): void => {
-      if (balance !== null) setNewBalance(balance);
-    });
   }, []);
 
   // ── Invalid session screen ───────────────────────────────────────────────
