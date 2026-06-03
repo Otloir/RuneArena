@@ -206,7 +206,7 @@
  */
 @media (min-width: 1024px) {
   .cardWrapper {
-    width: 30vw;
+    width: 100%;
   }
 
   .propertieIcon {
