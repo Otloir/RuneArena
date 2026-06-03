@@ -1,5 +1,5 @@
 import type { ReactElement } from "react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import StatusPanel from "../../molecules/StatusPanel/StatusPanel";
 import Creature from "../../molecules/Creature/Creature";
@@ -45,16 +45,15 @@ export default function BattleArena({
     error: playerTwoError,
   } = useCreatureBase(playerTwoCreatureId);
 
-  const randomizedOpponentLevel = useMemo((): number => {
-    if (!playerOneLevel) return 1;
-
+  const randomizedOpponentLevelRef = useRef<number | null>(null);
+  if (randomizedOpponentLevelRef.current === null && playerOneLevelId !== null) {
     const roll = Math.floor(Math.random() * 3);
-
-    if (roll === 0) return Math.max(1, playerOneLevel - 1);
-    if (roll === 2) return playerOneLevel + 1;
-
-    return playerOneLevel;
-  }, [playerOneLevel]);
+    randomizedOpponentLevelRef.current =
+      roll === 0 ? Math.max(1, playerOneLevel - 1) :
+      roll === 2 ? playerOneLevel + 1 :
+      playerOneLevel;
+  }
+  const randomizedOpponentLevel = randomizedOpponentLevelRef.current ?? 1;
 
   const {
     playerHp,
