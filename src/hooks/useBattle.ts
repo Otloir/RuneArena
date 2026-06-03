@@ -533,15 +533,11 @@ export function useBattle({
 
       if (isNowFaster && !wasAlreadyFaster) {
         log(
-          `${playerCreature?.name ?? "Your creature"} is now faster and goes first!`,
+          `${playerCreature?.name ?? "Your creature"} is now faster and goes first next turn!`,
         );
       }
 
-      if (isNowFaster) {
-        setTurnOwner("player");
-      } else {
-        setTurnOwner("opponent");
-      }
+      setTurnOwner("opponent");
 
       setIsProcessing(false);
     },
