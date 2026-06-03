@@ -16,11 +16,11 @@
   gap: 2rem;
 }
 
-.guestText{
-padding-top: 1rem;
+.guestText {
+  padding-top: 1rem;
 }
 
-.guestTextGuest{
+.guestTextGuest {
   color: var(--guest-text);
 }
 
@@ -98,18 +98,11 @@ padding-top: 1rem;
   cursor: pointer;
 }
 
-.loadingState{
- display: flex;
- align-items: center;
- justify-content: center;
- height: 100%;
-}
-
 /* tablet */
 
 @media (min-width: 641px) {
   .lobbyPage {
-  padding: 1rem;
+    padding: 1rem;
   }
 }
 

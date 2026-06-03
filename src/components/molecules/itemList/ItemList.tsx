@@ -168,7 +168,7 @@ export default function ItemList({
     }
   };
 
-  if (loading) return <div>Loading items...</div>;
+  if (loading) return <div className="pageLoadingState">Loading items...</div>;
   if (error) return <div>{error}</div>;
 
   if (items.length === 0 && type === "inventory") {

@@ -308,7 +308,7 @@ export default function BattleArena({
     return (
       <section className={styles.arena}>
         <div
-          className={styles.loadingState}
+          className="pageLoadingState"
           role="status"
           aria-live="polite"
           aria-label="Loading battle..."

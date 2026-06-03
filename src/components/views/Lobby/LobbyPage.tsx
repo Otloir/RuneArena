@@ -38,7 +38,7 @@ export default function LobbyPage(): ReactElement {
   }, [isInventoryOpen, isInfoOpen]);
 
   if (playerState.status === "loading") {
-    return <p className={styles.loadingState}>Loading...</p>;
+    return <p className="pageLoadingState">Loading...</p>;
   }
 
   if (playerState.status === "error") {
