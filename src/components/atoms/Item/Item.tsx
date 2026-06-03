@@ -66,10 +66,10 @@ function Item({
         <>
         <div className={styles.cardFooter}>
           <span className={styles.price}>
-            <span aria-hidden="true" className={styles.coinIcon}>
-              RC
-            </span>
             {displayItem.price}
+              <span aria-hidden="true" className={styles.coinIcon}>
+                RC
+              </span>
           </span>
 
           {type === "store" && onBuy && (

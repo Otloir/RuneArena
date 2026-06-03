@@ -28,8 +28,8 @@ You can play it on its own deployed [website](rune-arena.vercel.app), or through
 1. Clone the repo:
 
 ```bash
-git clone https://github.com/Otloir/Rune-Arena.git
-cd rune-arena
+git clone https://github.com/Otloir/RuneArena.git
+cd RuneArena
 ```
 
 2. Install dependencies
@@ -38,7 +38,6 @@ cd rune-arena
 npm install
 ```
 
-<<<<<<< HEAD
 3. Add .env.local file and keys to the root:
 
 ```bash
@@ -49,9 +48,6 @@ VITE_AMUSEMENT_API_KEY=<ACCESS_KEY>
 ```
 
 4. Run the dev server:
-=======
-3. Run the dev server:
->>>>>>> 431b753b51e1188064aa8bfb47dca4eff8e6fe67
 
 ```bash
 npm run dev
