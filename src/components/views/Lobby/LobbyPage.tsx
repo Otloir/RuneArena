@@ -216,17 +216,21 @@ export default function LobbyPage(): ReactElement {
                 handleStartArena();
               }}
             >
-              <div className={styles.creatureSelectButtons}>
-                {creatures.map((creature) => (
-                  <CreatureButton
-                    key={creature.id}
-                    creatureId={creature.id}
-                    userId={userId}
-                    onSelect={() => handleCreatureSelect(creature.id)}
-                    selected={selectedCreatureId === creature.id}
-                  />
-                ))}
-              </div>
+              {creatures.length === 0 ? (
+                <p>No creatures available!</p>
+              ) : (
+                <div className={styles.creatureSelectButtons}>
+                  {creatures.map((creature) => (
+                    <CreatureButton
+                      key={creature.id}
+                      creatureId={creature.id}
+                      userId={userId}
+                      onSelect={() => handleCreatureSelect(creature.id)}
+                      selected={selectedCreatureId === creature.id}
+                    />
+                  ))}
+                </div>
+              )}
               {chargeError && <p>Payment failed: {chargeError}</p>}
               <Button
                 className={styles.startButton}
