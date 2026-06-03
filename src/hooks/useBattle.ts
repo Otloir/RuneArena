@@ -416,29 +416,6 @@ export function useBattle({
   );
 
   // =========================
-  // AUTO NPC TURN
-  // =========================
-
-  useEffect(() => {
-    if (
-      turnOwner !== "opponent" ||
-      isProcessing ||
-      !opponentMoveIds.length ||
-      !isReady
-    )
-      return;
-
-    const run = async (): Promise<void> => {
-      setIsProcessing(true);
-      await new Promise((r) => setTimeout(r, 1500));
-      await executeOpponentTurn(opponentMoveIds);
-      setIsProcessing(false);
-    };
-
-    run();
-  }, [turnOwner, isProcessing, opponentMoveIds, executeOpponentTurn, isReady]);
-
-  // =========================
   // PLAYER MOVE
   // =========================
 
@@ -557,7 +534,30 @@ export function useBattle({
     },
     [turnOwner, isProcessing, applyItemEffect, playerCreature, opponentCreature, playerStatBoosts, log],
   );
- 
+
+  // =========================
+  // AUTO NPC TURN
+  // =========================
+
+  useEffect(() => {
+    if (
+      turnOwner !== "opponent" ||
+      isProcessing ||
+      !opponentMoveIds.length ||
+      !isReady
+    )
+      return;
+
+    const run = async (): Promise<void> => {
+      setIsProcessing(true);
+      await new Promise((r) => setTimeout(r, 2200));
+      await executeOpponentTurn(opponentMoveIds);
+      setIsProcessing(false);
+    };
+
+    run();
+  }, [turnOwner, isProcessing, opponentMoveIds, executeOpponentTurn, isReady]);
+  
 
   // =========================
   // RETURN
