@@ -8,11 +8,11 @@ export function useCreatureMoves(
 ): {
   moveIds: number[] | undefined;
   loading: boolean;
-  error: unknown;
+  error: string | null;
 } {
   const [moveIds, setMoveIds] = useState<number[] | undefined>(undefined);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<unknown>(undefined);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     let isActive = true;
@@ -20,7 +20,7 @@ export function useCreatureMoves(
     if (creatureId <= 0) {
       setMoveIds(undefined);
       setLoading(false);
-      setError(undefined);
+      setError(null);
       return () => {
         isActive = false;
       };
@@ -28,7 +28,7 @@ export function useCreatureMoves(
 
     const fetchMoves = async (): Promise<void> => {
       setLoading(true);
-      setError(undefined);
+      setError(null);
 
       try {
         let query = supabase
@@ -49,7 +49,7 @@ export function useCreatureMoves(
         }
       } catch (err) {
         if (isActive) {
-          setError(err);
+          setError(err instanceof Error ? err.message : "Failed to load moves");
           setMoveIds(undefined);
         }
       } finally {
