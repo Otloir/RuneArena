@@ -28,8 +28,8 @@ You can play it on its own deployed [website](rune-arena.vercel.app), or through
 1. Clone the repo:
 
 ```bash
-git clone https://github.com/Otloir/Rune-Arena.git
-cd rune-arena
+git clone https://github.com/Otloir/RuneArena.git
+cd RuneArena
 ```
 
 2. Install dependencies
