@@ -45,11 +45,6 @@ async function fetchCreatureMoveIds(
   }
 
   return moves
-    .sort((a, b) => {
-      const lvlA = Array.isArray(a.level) ? a.level[0]?.level : a.level?.level;
-      const lvlB = Array.isArray(b.level) ? b.level[0]?.level : b.level?.level;
-      return (lvlA ?? 0) - (lvlB ?? 0);
-    })
     .map((row) => row.move_id)
     .slice(0, 4);
 }
