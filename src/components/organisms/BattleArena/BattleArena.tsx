@@ -46,7 +46,7 @@ export default function BattleArena({
     error: playerTwoError,
   } = useCreatureBase(playerTwoCreatureId);
 
-  const maxLevelRef = useRef<number>(Infinity);
+  const maxLevelRef = useRef<number | null>(null);
 
   useEffect((): void => {
     getMaxLevel().then((max) => {
@@ -57,7 +57,8 @@ export default function BattleArena({
   const randomizedOpponentLevelRef = useRef<number | null>(null);
   if (
     randomizedOpponentLevelRef.current === null &&
-    playerOneLevelId !== null
+    playerOneLevelId !== null &&
+    maxLevelRef.current !== null          // wait until max is known
   ) {
       const roll = Math.floor(Math.random() * 3);
       const rawLevel =
@@ -67,7 +68,7 @@ export default function BattleArena({
             ? playerOneLevel + 1
             : playerOneLevel;
 
-  randomizedOpponentLevelRef.current = Math.min(rawLevel, maxLevelRef.current);
+      randomizedOpponentLevelRef.current = Math.min(rawLevel, maxLevelRef.current);
 
   }
   const randomizedOpponentLevel = randomizedOpponentLevelRef.current ?? 1;
@@ -256,8 +257,7 @@ export default function BattleArena({
     if (playerHp > 0 && opponentHp > 0) return;
     if (sessionInvalidRef.current) return;
 
-    const winner: "player" | "opponent" =
-      opponentHp <= 0 ? "player" : "opponent";
+    const winner: "player" | "opponent" = opponentHp <= 0 ? "player" : "opponent";
 
     const timer = setTimeout(async (): Promise<void> => {
       battleConcludedRef.current = true;
