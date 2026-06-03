@@ -20,6 +20,7 @@ interface BattleArenaProps {
   readonly playerOneCreatureId: string | number;
   readonly playerTwoCreatureId: string | number;
   readonly transaction: TransactionResponse | null;
+  readonly isGuest: boolean;
 }
 
 export default function BattleArena({
@@ -28,6 +29,7 @@ export default function BattleArena({
   playerOneCreatureId,
   playerTwoCreatureId,
   transaction,
+  isGuest,
 }: BattleArenaProps): ReactElement {
   const {
     creature: playerOneCreature,
@@ -155,7 +157,10 @@ export default function BattleArena({
     if (!playerOneCreature || !playerTwoCreature) return;
     if (battleStartedRef.current) return;
 
-    battleStartedRef.current = true;
+    if (isGuest) {                          // ← add this guard
+      battleStartedRef.current = true;      // prevent re-entry
+      return;
+    }
 
     startBattle({
       playerId: Number(playerOneId),
@@ -190,6 +195,7 @@ export default function BattleArena({
     playerOneCreatureId,
     playerTwoCreatureId,
     navigate,
+    isGuest,
   ]);
 
   // ── Forfeit on unmount if battle hasn't concluded normally ───────────────
@@ -209,7 +215,7 @@ export default function BattleArena({
         );
       });
     };
-  }, []);
+  }, [isGuest]);
 
   // ── Battle end → close server-side → navigate to result ─────────────────
 
@@ -218,13 +224,10 @@ export default function BattleArena({
     if (playerHp > 0 && opponentHp > 0) return;
     if (sessionInvalidRef.current) return;
 
-    const winner: "player" | "opponent" =
-      opponentHp <= 0 ? "player" : "opponent";
+    const winner: "player" | "opponent" = opponentHp <= 0 ? "player" : "opponent";
 
     const timer = setTimeout(async (): Promise<void> => {
       battleConcludedRef.current = true;
-
-      const battleId = battleIdRef.current;
 
       const stamp = transaction?.stamp
         ? {
@@ -233,11 +236,29 @@ export default function BattleArena({
           }
         : null;
 
+      // ── Guest: skip server call entirely ──────────────────────────────
+      if (isGuest) {
+        navigate("/result", {
+          replace: true,
+          state: {
+            winner,
+            playerCreatureName: playerOneCreature.name,
+            opponentCreatureName: playerTwoCreature.name,
+            xpGained,
+            stamp: null,
+            isGuest: true,
+          },
+        });
+        return;
+      }
+
+      // ── Authenticated user: close battle server-side ──────────────────
+      const battleId = battleIdRef.current;
+
       if (battleId === null) {
         console.warn(
           "[BattleArena] Battle ended but no battleId recorded — reward not granted.",
         );
-
         navigate("/result", {
           replace: true,
           state: {
@@ -249,7 +270,6 @@ export default function BattleArena({
             stamp,
           },
         });
-
         return;
       }
 
@@ -257,7 +277,6 @@ export default function BattleArena({
 
       try {
         await endBattle(battleId, winnerUserId);
-
         navigate("/result", {
           replace: true,
           state: {
@@ -266,7 +285,7 @@ export default function BattleArena({
             opponentCreatureName: playerTwoCreature.name,
             xpGained,
             stamp,
-            isGuest: transaction === null,
+            isGuest: false,
           },
         });
       } catch (reason: unknown) {
@@ -294,6 +313,7 @@ export default function BattleArena({
     navigate,
     xpGained,
     transaction,
+    isGuest,   // ← add this
   ]);
 
   // ── Loading state ────────────────────────────────────────────────────────
