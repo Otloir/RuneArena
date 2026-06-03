@@ -89,10 +89,6 @@
   box-shadow: none;
   border: none;
   padding: 1.5rem;
-  background-color: var(--btn-cta-bg);
-  box-shadow: none;
-  border: none;
-  padding: 1.5rem;
   color: var(--btn-cta-text);
 }
 
@@ -117,9 +113,8 @@
     padding: 2rem;
   }
   .creatureSelectButtons {
-    align-items: center;
-    justify-content: center;
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 2rem;
     flex-wrap: wrap;
   }
