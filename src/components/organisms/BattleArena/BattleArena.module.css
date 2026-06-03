@@ -60,16 +60,6 @@
   z-index: 10;
 }
 
-.loadingState {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: var(--text-primary);
-}
-
 /* ── Tablet ── */
 @media (min-width: 40rem) {
   .arena {
