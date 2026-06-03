@@ -152,5 +152,12 @@
   margin-top: 1rem;
   font-size: 1.25rem;
   font-weight: 700;
-  color: #ffd84d;
+  color: var(--xp-bar);
+}
+
+.rcGained {
+  margin-top: 1rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--coin-text);
 }
