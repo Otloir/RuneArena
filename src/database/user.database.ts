@@ -25,6 +25,34 @@ export async function getUserBalance(userId: number): Promise<number | null> {
   return data.runecoins;
 }
 
+export async function addRunecoins(
+  userId: number,
+  amount: number,
+): Promise<number | null> {
+  try {
+    const current = await getUserBalance(userId);
+    if (current === null) return null;
+    const newValue = current + amount;
+
+    const { data, error } = await supabase
+      .from("Users")
+      .update({ runecoins: newValue })
+      .eq("id", userId)
+      .select("runecoins")
+      .single();
+
+    if (error || !data) {
+      console.error("[addRunecoins] Failed to update runecoins:", error?.message);
+      return null;
+    }
+
+    return data.runecoins;
+  } catch (err) {
+    console.error("[addRunecoins] Error:", err);
+    return null;
+  }
+}
+
 
 export async function purchaseItem(
   userId: number,
