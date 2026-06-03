@@ -251,8 +251,17 @@ export default function BattleArena({
           }
         : null;
 
-      // ── Guest: skip server call entirely ──────────────────────────────
+      // ── Guest: award RC locally then navigate to result ───────────────
       if (isGuest) {
+        try {
+          // Award 5 RC to the guest user in the local Users table
+          // and include userId so ResultPage can fetch the new balance.
+          const { addRunecoins } = await import("../../../database/user.database");
+          await addRunecoins(Number(playerOneId), 5);
+        } catch (err) {
+          console.warn("[BattleArena] Failed to award guest RC:", err);
+        }
+
         navigate("/result", {
           replace: true,
           state: {
@@ -262,6 +271,7 @@ export default function BattleArena({
             xpGained,
             stamp: null,
             isGuest: true,
+            userId: Number(playerOneId),
           },
         });
         return;
