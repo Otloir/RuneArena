@@ -214,7 +214,7 @@ export default function BattleArena({
         );
       });
     };
-  }, [isGuest]);
+  }, []);
 
   // ── Battle end → close server-side → navigate to result ─────────────────
 
