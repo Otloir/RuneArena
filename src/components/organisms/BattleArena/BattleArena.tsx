@@ -132,7 +132,7 @@ export default function BattleArena({
     setPrevOpponentHp(opponentHp);
   }, [opponentHp, prevOpponentHp]);
 
-  // ── Opponent attack animation delay ─────────────────────────────────────  ← ADD HERE
+  // ── Opponent attack animation delay ─────────────────────────────────────
   useEffect(() => {
     if (turnOwner !== "opponent" || !isProcessing) {
       setOpponentIsAttacking(false);
