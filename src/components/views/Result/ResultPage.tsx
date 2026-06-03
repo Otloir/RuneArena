@@ -85,10 +85,7 @@ export default function ResultPage(): ReactElement {
   if (sessionError) {
     return (
       <main className={styles.resultPage}>
-        <section
-            className={styles.content}
-            aria-labelledby="result-title"
-          >
+        <section className={styles.content} aria-labelledby="result-title">
           <h1 className={`${styles.title} ${styles.defeat}`}>
             Invalid Session
           </h1>
@@ -123,9 +120,7 @@ export default function ResultPage(): ReactElement {
           ? `${playerName} defeated ${opponentName}. You gained ${xpGained} experience points.`
           : `${playerName} was defeated by ${opponentName}.`}
       </div>
-      <section
-        className={styles.content}
-      >
+      <section className={styles.content}>
         <h1
           ref={headingRef}
           id="result-title"
@@ -141,23 +136,12 @@ export default function ResultPage(): ReactElement {
             : `${playerName} was defeated by ${opponentName}...`}
         </p>
 
-        {playerWon && (
-          <p className={styles.coinsAwarded}>
-            {newBalance !== null
-              ? `+5 RC earned! (Balance: ${newBalance} RC)`
-              : "+5 RC earned!"}
-          </p>
-        )}
-
         {stamp !== null && (
           <section
             className={styles.rewardSection}
             aria-labelledby="reward-heading"
           >
-            <p
-              id="reward-heading"
-              className={styles.rewardLabel}
-            >
+            <p id="reward-heading" className={styles.rewardLabel}>
               You earned a stamp:
             </p>
             <article className={styles.rewardCard} aria-label="Stamp details">
@@ -183,6 +167,9 @@ export default function ResultPage(): ReactElement {
         >
           +{xpGained} XP
         </p>
+
+        {playerWon && <p className={styles.rcGained}>+5 RC </p>}
+
         <Button
           type="button"
           variant="neutral"

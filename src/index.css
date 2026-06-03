@@ -13,7 +13,7 @@
   --text-secondary: #6b7399;
   --text-tertiary: #4f5678;
   --text-light: #f3f4f6;
-  --coin-text: #d08700;
+  --coin-text: #d88f07;
   --guest-text: #73d0ed;
   --stamp: #6f00d0;
 
@@ -60,7 +60,7 @@
   /* ─── Health/Status Bar ─── */
   --hp-bar-damage: #a42121;
   --hp-bar: #04aa6d;
-  --xp-bar: #0483aa;
+  --xp-bar: #1a9fc8;
   --xp-bar-empty: #d9d9d9;
   --hp-bar-fill: var(--color-success);
   --heart-icon: #fb2c36;
